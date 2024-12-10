@@ -1,0 +1,23 @@
+~/Library/KeyBindings/DefaultKeyBinding.dict 
+
+Inspired by: https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
+and: https://discussions.apple.com/thread/251108215?login=true&sortBy=rank
+
+mkdir -p $HOME/Library/KeyBindings
+echo '{
+"\UF729" = "moveToBeginningOfLine:"; /* Home */
+"\UF72B" = "moveToEndOfLine:"; /* End */
+"$\UF729" = "moveToBeginningOfLineAndModifySelection:"; /* Shift + Home */
+"$\UF72B" = "moveToEndOfLineAndModifySelection:"; /* Shift + End */
+"^\UF729" = "moveToBeginningOfDocument:"; /* Ctrl + Home */
+"^\UF72B" = "moveToEndOfDocument:"; /* Ctrl + End */
+"$^\UF729" = "moveToBeginningOfDocumentAndModifySelection:"; /* Shift + Ctrl + Home */
+"$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
+"\UF72C" = "pageUp:"; /* PageUp       */
+"\UF72D" = "pageDown:"; /* PageDown     */
+"$\UF727" = "paste:"; /* Shift + Ins */
+"@\UF702"  = "moveWordBackward:"; /* Cmd  + LeftArrow */
+"@\UF703"  = "moveWordForward:"; /* Cmd  + RightArrow */
+"@$\UF702" = "moveWordBackwardAndModifySelection:"; /* Shift + Cmd  + Leftarrow */
+"@$\UF703" = "moveWordForwardAndModifySelection:"; /* Shift + Cmd  + Rightarrow */
+}' > $HOME/Library/KeyBindings/DefaultKeyBinding.dict
