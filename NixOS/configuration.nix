@@ -13,15 +13,18 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  #added by Jacek to fix the wifi issue:
+  boot.extraModprobeConfig = ''
+  	options rtw89_pci disable_clkreq=y disable_aspm_l1=y disable_aspm_l1ss=y
+  	options rtw89_core disable_ps_mode=y
+  	'';
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -59,7 +62,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -90,20 +93,45 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
 
-  # Install firefox.
-  programs.firefox.enable = true;
+  #added by jacek to fix pytorch not seeing nvidia gpu and libstd++.cc.6 libararies (which are located in /usr/lib on standard linux system) 
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [ 
+	linuxPackages.nvidia_x11 
+	stdenv.cc.cc.lib
+	zlib
+	glib
+	libGL
+	libGLU
+  ];
 
-  # Allow unfree packages
+  # Allow unfree packages (e.g. Nvidia drivers)
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      vim #Nano is  also installed by default.
-     wget #added by Jacek
-     git #added by Jacek
-     ollama # added by Jacek
-  ];
+     wget 
+     git 
+     ollama # added by Jacek to be replaced by the service below
+     mangohud # for fps display 
+     protonup
+     lutris
+     toybox #lspci etc.
+     brave #web browser
+     dconf #app to manage keyboard shortcuts
+     nix-index # for finding files like this one:
+     cudaPackages.cudatoolkit     
+     cudaPackages.cuda_nvcc # added by Jacek - cuda toolkit/compiler
+     gcc-unwrapped
+     python314
+     superTux
+     superTuxKart
+     extremetuxracer
+     freshfetch 
+     conky #nvidia overlay for displaying temps etc.
+     nvtopPackages.nvidia #enables nvtop terminal app which displays gpu usage
+];
 
   #services.ollama.enable = true; #added by Jacek
   # Some programs need SUID wrappers, can be configured further or are
@@ -115,7 +143,44 @@
   # };
 
   # List services that you want to enable:
+	
+  #added by Jacek - for gaming:
+  hardware.graphics.enable = true;
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia = {
+      modesetting.enable = true;
+      # Nvidia power management. Experimental, but can fix suspend/resume issues.
+      powerManagement.enable = false; 
+      # Fine-grained power management. Turns off GPU when not in use.
+      # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+      powerManagement.finegrained = false;
 
+      # Use the NVidia open source kernel module (not to be confused with Nouveau)
+      # Try setting this to "false" if "true" is causing issues. 
+      # "true" is recommended for RTX 2000 series and newer.
+      open = false;
+
+      # Enable the Nvidia settings menu,
+      # accessible via `nvidia-settings`.
+      nvidiaSettings = true;
+
+      # Selecting the specific package is often safer than 'stable'
+      # package = config.boot.kernelPackages.nvidiaPackages.stable; 
+      # Or typically:
+      package = config.boot.kernelPackages.nvidiaPackages.production;
+      #package = config.boot.kernelPackages.nvidiaPackages.stable;
+      
+   };
+
+   programs.steam.enable = true;
+   programs.steam.gamescopeSession.enable = true;
+
+   programs.gamemode.enable = true;
+
+   environment.sessionVariables = {
+	STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/root/compatibilitytools.d";# this path is required to run protonup in cmd...
+   };
+ 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
@@ -133,11 +198,4 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
 
-  # Added by Jacek:
-  #nix = {
-  #  package = pkgs.nixFlakes;
-  #  extraOptions = ''
-  #    experimental-features = nix-command flakes
-  #  '';
-  #};
 }
