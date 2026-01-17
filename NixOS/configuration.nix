@@ -13,11 +13,15 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  #added by Jacek to fix the wifi issue:
+  #added by Jacek: to detect PWM devices (fans)
+  boot.kernelModules = [ "it87" ];
+  #added by Jacek: first two: to fix the wifi issue. third to: detect fans to PWM them.
   boot.extraModprobeConfig = ''
   	options rtw89_pci disable_clkreq=y disable_aspm_l1=y disable_aspm_l1ss=y
   	options rtw89_core disable_ps_mode=y
+	options it87 force_id=0x8628 ignore_resource_conflict=1
   	'';
+  boot.kernelParams = [ "acpi_enforce_resources=lax" ];
 
   networking.hostName = "nixos"; # Define your hostname.
 
@@ -131,16 +135,7 @@
      freshfetch 
      conky #nvidia overlay for displaying temps etc.
      nvtopPackages.nvidia #enables nvtop terminal app which displays gpu usage
-];
-
-  #services.ollama.enable = true; #added by Jacek
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  ];
 
   # List services that you want to enable:
 	
@@ -174,8 +169,13 @@
 
    programs.steam.enable = true;
    programs.steam.gamescopeSession.enable = true;
-
    programs.gamemode.enable = true;
+   #added by JAcek to control sys fan by gpu temps. You must set "full speed" for the desired fans in the BIOS; Otherwise BIOS 'fan control' will override whatever you select in Liunx.
+   programs.coolercontrol = {
+       enable = true;
+       nvidiaSupport = true;
+   };
+  
 
    environment.sessionVariables = {
 	STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/root/compatibilitytools.d";# this path is required to run protonup in cmd...
