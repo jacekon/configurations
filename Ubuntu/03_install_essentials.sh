@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-echo "==> Installing vim + essential editors..."
+echo "==> Installing essential vim, git, curl, etc."
 
 sudo apt update
 sudo apt install -y \
