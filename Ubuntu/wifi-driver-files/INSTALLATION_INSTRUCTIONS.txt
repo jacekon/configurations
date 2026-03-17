@@ -1,0 +1,71 @@
+============================================================
+WiFi Driver Installation Instructions for Ubuntu 24.04.4
+RTW8852C WiFi Card - Kernel 6.8.0-58-generic
+============================================================
+
+STEP 1: Install Firmware Files (CRITICAL - Try this first)
+-----------------------------------------------------------
+cd /path/to/usb/rtw89-firmware
+sudo cp *.bin /lib/firmware/rtw89/
+sudo chmod 644 /lib/firmware/rtw89/rtw8852c*
+sudo modprobe -r rtw89_8852ce  # Unload if loaded
+sudo modprobe rtw89_8852ce      # Reload driver
+dmesg | grep rtw89              # Check for errors
+
+STEP 2: Install linux-firmware Package (if Step 1 fails)
+---------------------------------------------------------
+cd /path/to/usb
+sudo dpkg -i linux-firmware_24.04_all.deb
+sudo update-initramfs -u
+sudo reboot
+
+STEP 3: Check WiFi Status
+--------------------------
+ip link show                    # Look for wlan0 or wlp* interface
+sudo dmesg | grep -i rtw89      # Check driver messages
+lspci -k | grep -A 3 Network    # Verify driver loaded
+
+STEP 4: If Still Not Working - Compile Driver from Source
+----------------------------------------------------------
+# Install kernel headers first
+cd /path/to/usb/kernel-headers
+sudo dpkg -i linux-headers-6.8.0-58_all.deb
+sudo dpkg -i linux-headers-6.8.0-58-generic_amd64.deb
+
+# Install build tools (if not already installed)
+sudo apt install build-essential dkms
+
+# Extract and compile driver
+cd /path/to/usb/driver-source
+unzip rtw89-lwfinger-master.zip
+cd rtw89-master
+make
+sudo make install
+sudo modprobe rtw89_8852ce
+
+STEP 5: Troubleshooting
+-----------------------
+# Check if firmware is loaded
+sudo dmesg | tail -50
+
+# Check module info
+modinfo rtw89_8852ce
+
+# Force module parameters (if ce vs cd mismatch)
+sudo modprobe rtw89_8852ce debug=1
+
+# Check hardware
+lspci -nn | grep -i network
+lsusb  # If it's a USB WiFi adapter
+
+# Blacklist conflicting drivers
+echo "blacklist rtw88_8852ce" | sudo tee /etc/modprobe.d/blacklist-wifi.conf
+
+NOTES:
+------
+- The rtw89 driver is built into kernel 6.8, so firmware files are usually enough
+- Your error mentioned "rtw89_8852cd" vs "8852ce" - this is a variant issue
+- Ensure you're using the correct variant (ce vs cd) for your exact hardware
+- Run 'lspci -nn' to find exact PCI ID of your WiFi card
+
+Good luck!
