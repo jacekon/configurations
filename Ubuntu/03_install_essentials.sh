@@ -15,7 +15,8 @@ sudo apt install -y \
     htop \
     tree \
     unzip \
-    xclip
+    xclip \
+    npm
 
 echo "  [OK] Vim + essentials installed"
 echo "==> You can now edit scripts with vim!"

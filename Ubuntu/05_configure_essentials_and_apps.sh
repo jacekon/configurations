@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
-# natural-scrolling.sh
-# Enables natural scrolling on Pop!_OS COSMIC (touchpad + mouse).
-# Uses gsettings (COSMIC Settings backend) - persists across reboots.
-# Equivalent to COSMIC Settings > Input Devices > Touchpad > Natural Scrolling
+# Configures git, enables natural scrolling, etc.
 
 set -euo pipefail
+
+#Git variables:
+read -p "Enter your Git username: " GIT_USER
+read -s -p "Enter your Git email: " GIT_EMAIL
+echo
+read -s -p "Enter your GitHub PAT (token): " GIT_TOKEN
+echo
+
+# Set user info
+git config --global user.name "$GIT_USER"
+git config --global user.email "$GIT_EMAIL"
+
+# Set credential helper (stores permanently after first push)
+git config --global credential.helper store
+
+echo "Git configured!"
+echo "Now do a 'git push' once - enter username ($GIT_USER) and token when prompted."
+echo "Future pushes will be automatic."
+echo "Verify: git config --list | grep user"
 
 echo "==> Enabling natural scrolling..."
 
@@ -24,5 +40,3 @@ gsettings get org.gnome.desktop.peripherals.mouse natural-scroll
 
 echo ""
 echo "==> Done! Scroll direction should now be natural (Mac-like)."
-echo "    Log out/in or restart COSMIC Settings daemon if no immediate effect:"
-echo "    killall cosmic-settings-daemon  # or reboot"
