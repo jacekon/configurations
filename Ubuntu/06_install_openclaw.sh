@@ -1,3 +1,11 @@
+#!/usr/bin/env bash
+
+# Ensure the script is being run as root otherwise we can't reconfigure ollams context limits
+if [ "$EUID" -ne 0 ]; then
+  echo "❌ Please run this script as root (use: sudo ./set_ollama_vram_limit.sh)"
+  exit 1
+fi
+
 echo 'Installing SearXNG'
 docker pull docker.io/searxng/searxng:latest
 mkdir -p ./searxng/config/ ./searxng/data/
@@ -22,6 +30,23 @@ docker run -d \
 echo 'Installing ollama'
 
 curl -fsSL https://ollama.com/install.sh | sh
+
+echo "⚙️ Configuring global context limit (32768 tokens) for Ollama..."
+
+# Create the systemd override directory for Ollama
+mkdir -p /etc/systemd/system/ollama.service.d
+
+# Create the override configuration file and insert the environment variables
+cat <<EOF > /etc/systemd/system/ollama.service.d/override.conf
+[Service]
+Environment="OLLAMA_CONTEXT_LENGTH=65536"
+Environment="OLLAMA_NUM_CTX=65536"
+EOF
+
+echo "🔄 Reloading systemd daemon and restarting the Ollama service..."
+# Reload systemctl so it sees the new override file, then restart the service
+systemctl daemon-reload
+systemctl restart ollama
 
 echo 'Installing openclaw'
 

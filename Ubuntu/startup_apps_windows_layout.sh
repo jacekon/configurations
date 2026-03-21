@@ -88,7 +88,7 @@ sleep 2
 move_window "HtopTerm" $MID_X 0 $MID_W $((SCREEN_H / 2)) 1
 
 # ── 3. Terminal — bottom-middle ───────────────────────────────────────────
-gnome-terminal --class="BottomTerm" --title="Terminal" -- bash -c "journalctl -f -u ollama -u openclaw CONTAINER_NAME=searxng" &
+gnome-terminal --class="BottomTerm" --title="Terminal" &
 sleep 2
 move_window "BottomTerm" $MID_X $((SCREEN_H / 2)) $MID_W $((SCREEN_H / 2)) 1
 
