@@ -18,7 +18,7 @@ curl -X POST http://localhost:4318/v1/traces \
               "spanId": "0123456789abcdef",
               "name": "test-span-from-curl",
               "startTimeUnixNano": "'$(date +%s000000000)'",
-              "endTimeUnixNano": "'$(date +%s000000000)'"
+	      "endTimeUnixNano": "'$(date +%s100000000)'"
             }
           ]
         }

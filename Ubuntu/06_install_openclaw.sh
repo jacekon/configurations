@@ -57,3 +57,26 @@ npm i -g clawhub
 clawhub install Searxng
 clawhub install summarize
 
+echo 'Install open telemetry plugin for Jaeger'
+cd /home/jacek/.npm-global/lib/node_modules/openclaw/extensions/diagnostics-otel/
+npm install
+openclaw plugins install @openclaw/diagnostics-otel
+openclaw gateway restart
+
+echo 'Otel plugin isntalled. Import openclaw.json or enable otel there and set Jaeger url.' 
+
+echo 'Install docker compose. So we can install Langfuse later'
+sudo mkdir -p /usr/local/lib/docker/cli-plugins
+sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
+sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+docker compose version
+
+echo 'Install Langfuse'
+git clone https://github.com/langfuse/langfuse.git
+cd langfuse
+docker compose up
+
+echo "Now you need to generate keys, base64 them and configure openclaw otel with it"
+echo "-n \"pk-lf-...:sk-lf-...\" | base64"
+
+
