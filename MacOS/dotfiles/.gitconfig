@@ -1,0 +1,6 @@
+[user]
+	name = Jacek Konopelski
+	email = jacek.konopelski@sap.com
+
+[includeIf "gitdir:~/GH/jacekon/"]
+	path = ~/.gitconfig-personal
