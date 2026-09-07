@@ -3,7 +3,7 @@ Config files for various systems and apps
 
 ## MacOS
 
-Bootstrap a new Mac with a single command:
+Bootstrap a new Mac with a single\* command:
 
 ```bash
 git clone https://github.com/jacekon/configurations.git
@@ -32,6 +32,7 @@ cd configurations/MacOS
 - Edit dotfiles directly in the cloned repo — changes are live immediately since all are symlinked
 - Place kubeconfig files in `~/.kube/configs/` — kubie scans this directory automatically
 - Place kcp config files in `~/.kcp/` and switch environments with `kcpenv <dev|stage|prod|us50|cn40>`
+- \*Manually do: Obsidian-Notes/Apple/The_New_File_Shortcut.md 
 
 ## PopOS / Ubuntu / NixOS
 
