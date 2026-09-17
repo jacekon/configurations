@@ -1,4 +1,7 @@
 #!/bin/bash
+# Moves iPhone/iPad screenshots into a Screenshots/ subfolder.
+# Detection is dimension-based (not filename-based) so it works on renamed files too.
+# Pass a directory as $1, or run from the target folder.
 
 SOURCE="${1:-.}"
 DEST="$SOURCE/Screenshots"
@@ -15,7 +18,8 @@ find "$SOURCE" -maxdepth 1 -type f \( \
     width=$(sips -g pixelWidth "$file" 2>/dev/null | awk '/pixelWidth:/ {print $2}')
     height=$(sips -g pixelHeight "$file" 2>/dev/null | awk '/pixelHeight:/ {print $2}')
 
-    # Common iPhone/iPad screenshot dimensions
+    # Exact pixel dimensions for known iPhone/iPad screenshot sizes.
+    # Portrait and landscape variants are both listed (WxH and HxW).
     case "${width}x${height}" in
         1080x2340|2340x1080|1290x2796|2796x1290|1284x2778|2778x1284|\
         1242x2688|2688x1242|1125x2436|2436x1125|\

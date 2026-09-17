@@ -74,6 +74,9 @@ plugins=(git aliases zsh-autosuggestions zsh-syntax-highlighting kubectl gh dock
 
 source $ZSH/oh-my-zsh.sh
 
+# kubectl plugin aliases kcp to 'kubectl cp'; override with the real kcp CLI
+unalias kcp 2>/dev/null || true
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"

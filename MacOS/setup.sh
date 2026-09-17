@@ -31,7 +31,9 @@ brew install --quiet \
   herdr \
   pwgen \
   deno \
-  kubie
+  kubie \
+  exiftool \
+  ffmpeg
 
 # ── Casks ─────────────────────────────────────────────────────────────────────
 brew install --quiet --cask \
@@ -66,6 +68,17 @@ mkdir -p "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 ln -sf "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" \
   "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
 
+# ── KCP CLI ───────────────────────────────────────────────────────────────────
+# Not on Homebrew — download from internal release page.
+# Check https://github.tools.sap/kyma/kcp-cli/releases for the latest version.
+if ! command -v kcp &>/dev/null || [[ "$(command -v kcp)" != "/usr/local/bin/kcp" ]]; then
+  echo "Installing kcp CLI..."
+  KCP_VERSION="1.13.0"
+  curl -fsSL "https://github.tools.sap/kyma/kcp-cli/releases/download/v${KCP_VERSION}/kcp-darwin-arm64-${KCP_VERSION}" \
+    -o /usr/local/bin/kcp
+  chmod +x /usr/local/bin/kcp
+fi
+
 # ── Dotfiles ──────────────────────────────────────────────────────────────────
 echo "Symlinking dotfiles..."
 
@@ -85,6 +98,14 @@ ln -sf "$DOTFILES_DIR/DefaultKeyBinding.dict" "$HOME/Library/KeyBindings/Default
 echo ""
 echo "NOTE: Place your kubeconfig files in ~/.kube/configs/ — kubie scans this directory."
 echo "      kcp config files go in ~/.kcp/ and are selected via kcpenv <dev|stage|prod|us50|cn40>."
+
+# ── Photos-Manipulations Python dependencies ──────────────────────────────────
+# Required by scripts in MacOS/Photos-Manipulations/
+# ocrmac wraps Apple's Vision framework (Live Text) — macOS 12+ only.
+pip3 install --quiet --upgrade \
+  Pillow \
+  numpy \
+  ocrmac
 
 echo ""
 echo "Done. Run: source ~/.zshrc" or reload the shell.
