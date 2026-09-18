@@ -82,6 +82,7 @@ fi
 # ── Dotfiles ──────────────────────────────────────────────────────────────────
 echo "Symlinking dotfiles..."
 
+ln -sf "$DOTFILES_DIR/.vimrc"               "$HOME/.vimrc"
 ln -sf "$DOTFILES_DIR/.zshrc"               "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.gitconfig"           "$HOME/.gitconfig"
 ln -sf "$DOTFILES_DIR/.gitconfig-personal"  "$HOME/.gitconfig-personal"
