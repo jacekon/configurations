@@ -104,6 +104,24 @@ echo "      kcp config files go in ~/.kcp/ and are selected via kcpenv <dev|stag
 # Use F1–F12 as standard function keys (Fn modifier needed for volume/brightness/etc.)
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
+# Dictation shortcut: Numpad 0 (keycode 82, no modifiers)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 164 '
+<dict>
+  <key>enabled</key><true/>
+  <key>value</key>
+  <dict>
+    <key>parameters</key>
+    <array>
+      <integer>48</integer>
+      <integer>82</integer>
+      <integer>2097152</integer>
+    </array>
+    <key>type</key>
+    <string>standard</string>
+  </dict>
+</dict>'
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
 # ── Photos-Manipulations Python dependencies ──────────────────────────────────
 # Required by scripts in MacOS/Photos-Manipulations/
 # ocrmac wraps Apple's Vision framework (Live Text) — macOS 12+ only.
