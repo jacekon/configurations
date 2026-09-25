@@ -48,6 +48,30 @@ if ! command -v omlx &>/dev/null && [[ ! -d "$HOME/.omlx" ]]; then
   brew install --quiet jundot/omlx/omlx
 fi
 
+# ── Pi coding agent (local model terminal agent) ──────────────────────────────
+# Launch via: omlx launch pi  (prompts for model, starts Pi pointed at oMLX)
+if ! command -v pi &>/dev/null; then
+  echo "Installing Pi coding agent..."
+  npm install -g @earendil-works/pi-coding-agent
+fi
+# Extensions: pi-web-access (HTTP) + pi-mcp-adapter (MCP bridge)
+pi install npm:pi-web-access 2>/dev/null || true
+pi install npm:pi-mcp-adapter 2>/dev/null || true
+# Chrome DevTools MCP — global config for browser automation
+mkdir -p "$HOME/.pi/agent"
+if [[ ! -f "$HOME/.pi/agent/mcp.json" ]]; then
+  cat > "$HOME/.pi/agent/mcp.json" <<'JSON'
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    }
+  }
+}
+JSON
+fi
+
 # ── VSCode extensions ─────────────────────────────────────────────────────────
 if command -v code &>/dev/null; then
   code --install-extension anthropic.claude-code --force
