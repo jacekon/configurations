@@ -1,0 +1,8 @@
+# Python artifacts
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Real-ESRGAN binary and model weights — installed via setup_realesrgan.sh, not committed
+MacOS/Photos-Manipulations/Upscale_Photos/bin/
