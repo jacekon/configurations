@@ -119,6 +119,8 @@ ln -sf "$DOTFILES_DIR/gh_config.yml"     "$HOME/.config/gh/config.yml"
 
 mkdir -p "$HOME/Library/KeyBindings"
 ln -sf "$DOTFILES_DIR/DefaultKeyBinding.dict" "$HOME/Library/KeyBindings/DefaultKeyBinding.dict"
+mkdir -p "$HOME/.config/mc"
+ln -sf "$DOTFILES_DIR/mc.keymap"             "$HOME/.config/mc/keymap"
 
 echo ""
 echo "NOTE: Place your kubeconfig files in ~/.kube/configs/ — kubie scans this directory."
@@ -149,6 +151,11 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 164 '
   </dict>
 </dict>'
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
+# ── Terminal key mappings ─────────────────────────────────────────────────────
+# Maps Home, End, Shift+Up, Shift+Down in the active Terminal profile.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+zsh "$SCRIPT_DIR/setup_terminal_keymaps.sh"
 
 # ── Photos-Manipulations Python dependencies ──────────────────────────────────
 # Required by scripts in MacOS/Photos-Manipulations/
