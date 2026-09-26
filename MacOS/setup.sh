@@ -125,6 +125,10 @@ echo "NOTE: Place your kubeconfig files in ~/.kube/configs/ — kubie scans this
 echo "      kcp config files go in ~/.kcp/ and are selected via kcpenv <dev|stage|prod|us50|cn40>."
 
 # ── macOS defaults ────────────────────────────────────────────────────────────
+
+# ── Dock orientation ──────────────────────────────────────────────────────────
+# Move dock to the left side (vertical on left)
+defaults write com.apple.dock orientation -string "left"
 # Use F1–F12 as standard function keys (Fn modifier needed for volume/brightness/etc.)
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
