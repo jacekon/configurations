@@ -17,7 +17,7 @@ cd Upscale_Photos
 bash setup_realesrgan.sh
 ```
 
-This downloads `realesrgan-ncnn-vulkan` and its model weights into `Upscale_Photos/bin/` — no global install, no PATH changes needed.
+This downloads `realesrgan-ncnn-vulkan` and its model weights into `Upscale_Photos/bin/` — no global install, no PATH changes needed. Re-running the script is safe but will re-download everything.
 
 **2. Set up a Python virtual environment (one-time):**
 
@@ -30,6 +30,8 @@ pip install pillow pillow-heif
 ```
 
 ### Usage
+
+Run these commands in order in the same shell session — the venv must be active before changing directory:
 
 ```bash
 # From MacOS/Photos-Manipulations/
@@ -64,7 +66,7 @@ python upscale_photo.py ~/Photos/IMG_3859.HEIC --scale 2 --output ~/Desktop/resu
 
 - macOS only (universal binary, works on Apple Silicon and Intel)
 - HEIC input is converted to a temp JPEG before processing and cleaned up automatically
-- Models: `realesrgan-x4plus` for 4x (photo-optimised), `realesr-animevideov3-x2` for 2x
+- Models: `realesrgan-x4plus` for 4x (photo-optimised), `realesr-animevideov3-x2` for 2x (a general-purpose video model — no photo-specific 2x model is bundled in the release)
 - The binary and models live in `Upscale_Photos/bin/` — self-contained, portable; move the whole `Upscale_Photos/` folder to another Mac and re-run `setup_realesrgan.sh`
 - Very large images (e.g. already-upscaled files) may crash the binary due to GPU memory limits
 
